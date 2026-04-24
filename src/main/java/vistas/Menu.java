@@ -4,20 +4,32 @@
  */
 package vistas;
 
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author carlo
  */
-public class Menu extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Menu.class.getName());
+    public class Menu extends javax.swing.JFrame {
+           
+        DefaultTableModel modelo;
+        private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Menu.class.getName());
 
-    /**
-     * Creates new form Menu
-     */
-    public Menu() {
-        initComponents();
-    }
+        /**
+         * Creates new form Menu
+         */
+        public Menu(models.Usuario u) {
+            initComponents();
+            this.setLocationRelativeTo(null); 
+            mostrarUsuario(); //
+                // Solo el administrador puede visualizar el botón de reinicio
+        if (u.getRol().equalsIgnoreCase("ADMIN")) {
+            btnReiniciarClaves.setVisible(true);
+        } else {
+            btnReiniciarClaves.setVisible(false);
+        }
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,8 +42,16 @@ public class Menu extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         contenedor = new javax.swing.JPanel();
+        tblU = new javax.swing.JScrollPane();
+        tblUsuarios = new javax.swing.JTable();
+        label1 = new java.awt.Label();
+        jLabel1 = new javax.swing.JLabel();
+        btnAgregar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnReiniciarClaves = new javax.swing.JButton();
+        mnuCerrarSesion = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -39,19 +59,90 @@ public class Menu extends javax.swing.JFrame {
 
         jButton1.setText("jButton1");
 
+        contenedor.setBackground(new java.awt.Color(102, 102, 102));
+
+        tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Nombre", "Contraseña", "Rol", "Estado"
+            }
+        ));
+        tblU.setViewportView(tblUsuarios);
+
+        label1.setText("label1");
+
+        jLabel1.setText("MENU MANTENIMIENTO DE USUARIOS");
+
+        btnAgregar.setBackground(new java.awt.Color(0, 153, 255));
+        btnAgregar.setText("AGREGAR");
+        btnAgregar.addActionListener(this::btnAgregarActionPerformed);
+
+        btnEditar.setBackground(new java.awt.Color(0, 153, 255));
+        btnEditar.setText("EDITAR");
+        btnEditar.addActionListener(this::btnEditarActionPerformed);
+
+        btnEliminar.setBackground(new java.awt.Color(255, 51, 51));
+        btnEliminar.setText("ELIMINAR");
+        btnEliminar.addActionListener(this::btnEliminarActionPerformed);
+
+        btnReiniciarClaves.setBackground(new java.awt.Color(102, 102, 255));
+        btnReiniciarClaves.setText("Reiniciar Claves");
+        btnReiniciarClaves.addActionListener(this::btnReiniciarClavesActionPerformed);
+
+        mnuCerrarSesion.setBackground(new java.awt.Color(255, 51, 51));
+        mnuCerrarSesion.setText("Cerrar Sesion");
+        mnuCerrarSesion.addActionListener(this::mnuCerrarSesionActionPerformed);
+
         javax.swing.GroupLayout contenedorLayout = new javax.swing.GroupLayout(contenedor);
         contenedor.setLayout(contenedorLayout);
         contenedorLayout.setHorizontalGroup(
             contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 609, Short.MAX_VALUE)
+            .addGroup(contenedorLayout.createSequentialGroup()
+                .addContainerGap(29, Short.MAX_VALUE)
+                .addGroup(contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(contenedorLayout.createSequentialGroup()
+                            .addComponent(tblU, javax.swing.GroupLayout.PREFERRED_SIZE, 865, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(38, 38, 38))
+                        .addGroup(contenedorLayout.createSequentialGroup()
+                            .addComponent(btnAgregar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnEditar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnEliminar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnReiniciarClaves, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(47, 47, 47))
+                        .addGroup(contenedorLayout.createSequentialGroup()
+                            .addComponent(mnuCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap()))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorLayout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(277, 277, 277))))
         );
         contenedorLayout.setVerticalGroup(
             contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 461, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorLayout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addGroup(contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAgregar)
+                    .addComponent(btnEditar)
+                    .addComponent(btnEliminar)
+                    .addComponent(btnReiniciarClaves))
+                .addGap(18, 18, 18)
+                .addComponent(tblU, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(mnuCerrarSesion)
+                .addGap(9, 9, 9))
         );
 
-        jMenu1.setText("Opciones");
-        jMenuBar1.add(jMenu1);
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -60,15 +151,117 @@ public class Menu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(contenedor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        //instanciamos la ventana para agregar 
+        RegistrarUsuario reg = new RegistrarUsuario(this, true);
+        reg.setLocationRelativeTo(null);
+        reg.setVisible(true);      
+        
+        mostrarUsuario();
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+
+        EditarUsuario win = new EditarUsuario(this, true);
+        win.setLocationRelativeTo(null);
+        win.setVisible(true); 
+        mostrarUsuario();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int filaSeleccionada = tblUsuarios.getSelectedRow(); 
+    
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un registro.");
+            return;
+        }
+
+        // Obtención del nombre de usuario para la búsqueda 
+        String nombreUsuario = tblUsuarios.getValueAt(filaSeleccionada, 0).toString().trim();
+
+        // Obtención del Rol para la validación de seguridad 
+        String rolUsuario = tblUsuarios.getValueAt(filaSeleccionada, 2).toString().trim();
+
+        // Validación: Si el contenido de la columna 2 es "ADMIN" o "USER
+        // se interrumpe el flujo para proteger la cuenta.
+        if (rolUsuario.equalsIgnoreCase("ADMIN") || rolUsuario.equalsIgnoreCase("ADMINISTRADOR")) {
+            JOptionPane.showMessageDialog(this, 
+                "Acción denegada: No se puede inactivar una cuenta con privilegios de Administrador.", 
+                "Seguridad del Sistema", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+
+        // Procedimiento de modificación en la lista global
+        for (models.Usuario u : models.Usuario.getListaUsuario()) {
+            if (u.getUserName().equalsIgnoreCase(nombreUsuario)) {
+                u.setActivo(false); 
+                break;
+            }
+        }
+
+        // Actualización de la vista
+        mostrarUsuario(); 
+        JOptionPane.showMessageDialog(this, "El usuario ha sido inactivado.");
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnReiniciarClavesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReiniciarClavesActionPerformed
+        // 1. Obtención del índice de la fila seleccionada en el JTable
+            int fila = tblUsuarios.getSelectedRow();
+
+            // 2. Verificación de selección
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, 
+                    "Por favor, seleccione un usuario de la tabla para reiniciar su contraseña.", 
+                    "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            // 3. Extracción del nombre de usuario de la columna 0
+            String nombreUsuario = tblUsuarios.getValueAt(fila, 0).toString();
+
+            // 4. Instanciación del JDialog 'ReinicioClave'
+            
+            ReinicioClave dialog = new ReinicioClave(this, true, nombreUsuario);
+
+            // 5. Configuración de posición y visibilidad
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
+
+            // 6. Refresco opcional de la tabla tras cerrar el diálogo
+            mostrarUsuario();
+    }//GEN-LAST:event_btnReiniciarClavesActionPerformed
+
+    private void mnuCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCerrarSesionActionPerformed
+        // 1. Confirmación de salida para evitar cierres accidentales
+    int opcion = JOptionPane.showConfirmDialog(this, 
+            "¿Está seguro de que desea cerrar la sesión actual?", 
+            "Confirmar Salida", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.QUESTION_MESSAGE);
+
+    if (opcion == JOptionPane.YES_OPTION) {
+        // 2. Instanciación del formulario de Login
+        vistas.Login ventanaLogin = new vistas.Login();
+        ventanaLogin.setLocationRelativeTo(null);
+        ventanaLogin.setVisible(true);
+
+        // 3. Liberación de la ventana de Menú actual
+        this.dispose();
+    }
+    }//GEN-LAST:event_mnuCerrarSesionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -90,16 +283,55 @@ public class Menu extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Menu().setVisible(true));
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            // Le pasamos null para que compile, ya que este main 
+            // casi nunca se usa en el proyecto real
+            new Menu(null).setVisible(true); 
+        }
+    });
+        
     }
-
+    
+    
+    //metodo mostrar Usuarios en la tabla 
+    public void mostrarUsuario(){
+        //se definen las columnas
+        String[] titulos = {"USUARIO", "PASSWORD", "ROL", "ESTADO"};
+        //inicializaoms el modelo con los titulos 
+        modelo = new DefaultTableModel(null, titulos){
+        public boolean editable(int row, int colum){
+                return false;
+            }
+        };
+        //limpiamos la tabla
+        modelo.setRowCount(0);
+        //Array
+        for(models.Usuario u : models.Usuario.getListaUsuario()){
+            Object[] fila = new Object[4];
+            fila[0] = u.getUserName();
+            fila[1] = u.getPassword();
+            fila[2] = u.getRol();
+            fila[3] = u.isActivo() ? "ACTIVO" : "INACTIVO"; 
+            
+            modelo.addRow(fila); // Agregamos la fila al modelo
+        }
+        
+        tblUsuarios.setModel(modelo);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnReiniciarClaves;
     private javax.swing.JPanel contenedor;
     private javax.swing.JButton jButton1;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private java.awt.Label label1;
+    private javax.swing.JButton mnuCerrarSesion;
+    private javax.swing.JScrollPane tblU;
+    private javax.swing.JTable tblUsuarios;
     // End of variables declaration//GEN-END:variables
 }
